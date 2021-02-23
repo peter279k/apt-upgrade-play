@@ -1,4 +1,4 @@
-# Using apt-get update and upgrade and reboot checking playbook with Ansible
+# apt-upgrade-play
 
 # Prerequisite
 
