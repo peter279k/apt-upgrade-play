@@ -1,0 +1,33 @@
+---
+- name: apt_upgrade
+  hosts: local_server
+  user: devops
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Check /usr/bin/python is existed
+      stat:
+        path: /usr/bin/python
+      register: python_bin
+    - name: Create a symbolic link for /usr/bin/python3
+      file:
+        src: /usr/bin/python3
+        dest: /usr/bin/python
+        state: link
+      when: python_bin.stat.exists == false
+ 
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
+        force_apt_get: true
+    - name: check /var/run/reboot-required file is existed
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_stat
+    - name: reboot host machine if rebooted file is existed
+      reboot:
+        reboot_timeout: 5
+      when: reboot_stat.stat.exists == true
