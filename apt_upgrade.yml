@@ -23,7 +23,7 @@
       apt:
         upgrade: dist
         force_apt_get: true
-    - name: check /var/run/reboot-required file is existed
+    - name: register /var/run/reboot-required file existing variable
       stat:
         path: /var/run/reboot-required
       register: reboot_stat
